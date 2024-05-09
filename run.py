@@ -23,16 +23,18 @@ sleep(2)
 driver.find_element(By.XPATH,XPATH_password).send_keys('July2017!')
 sleep(2)
 driver.find_element(By.XPATH,XPATH_login).click()
-sleep(5)
+sleep(2)
 
 XPATH_fixed = '/html/body/form/div[3]/table/tbody/tr[4]/td/div/h3/table/tbody/tr[3]/td/label'
 XPATH_enter = '/html/body/form/div[3]/table/tbody/tr[4]/td/div/h3/input'
 driver.find_element(By.XPATH,XPATH_fixed).click()
 sleep(2)
 driver.find_element(By.XPATH,XPATH_enter).click()
+sleep(2)
 
 XPATH_date = '/html/body/form/div[3]/table/tbody/tr[4]/td/div/div/select'
-driver.find_element(By.XPATH,XPATH_date)
+
+print("date drop down text %s", driver.find_element(By.XPATH,XPATH_date).text)
 
 sleep(1000)
 
