@@ -46,10 +46,12 @@ while ladder_date == "" :
         ladder_date = driver.find_element(By.XPATH,XPATH_date).text
     except:
         ladder_date = ""
+        print("Exception occured in reading date. Could not find XPATH_date element.")
 
     print(f"date drop down text {ladder_date}")
     if ladder_date == "" :
-        sleep(10000)
+        sleep(10)
+        driver.refresh()
 
 
 # if any ladder_date is available send email
