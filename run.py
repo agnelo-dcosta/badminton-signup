@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
 import smtplib, ssl
+import configparser
 
 urls = [
 
@@ -16,14 +17,18 @@ for url in urls:
     driver = webdriver.Chrome(service=s)
     driver.get(url)
 
+config = configparser.ConfigParser()
+config.sections()
+config.read('config.ini')
+
 # Login page
 XPATH_username='/html/body/form/div[3]/table/tbody/tr[4]/td/div/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[3]/td/input'
 XPATH_password='/html/body/form/div[3]/table/tbody/tr[4]/td/div/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[5]/td/input'
 XPATH_login = '/html/body/form/div[3]/table/tbody/tr[4]/td/div/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[8]/td/input'
 
-driver.find_element(By.XPATH,XPATH_username).send_keys('agnelo.dcosta')
+driver.find_element(By.XPATH,XPATH_username).send_keys(config['DEFAULT']['SBCUsername'])
 sleep(2)
-driver.find_element(By.XPATH,XPATH_password).send_keys('')
+driver.find_element(By.XPATH,XPATH_password).send_keys(config['DEFAULT']['SBCPassword'])
 sleep(2)
 driver.find_element(By.XPATH,XPATH_login).click()
 sleep(2)
@@ -59,9 +64,9 @@ while len(ladder_date.strip()) == 0:
 # if any ladder_date is available send email
 port = 465  # For SSL
 smtp_server = "smtp.gmail.com"
-sender_email = "penpalshivani24@gmail.com"  # Enter your address
-receiver_email = "agnelo.m.dcosta@gmail.com"  # Enter receiver address
-app_pass = "" # Enter valid password
+sender_email = config['DEFAULT']['GmailSenderEmail']  # Enter your address
+receiver_email = config['DEFAULT']['GmailRecieverEmail']  # Enter receiver address
+app_pass = config['DEFAULT']['GooglePasscode'] # Enter valid password
 message = f"""\
 Subject: Ladder Open for {ladder_date}
 
@@ -70,12 +75,11 @@ Please sign up for Ladder!!!!!!!!!!!!!
 HURRY UP
 - Aggi
 """
+print(f"{message}")
 
 context = ssl.create_default_context()
 with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
     server.login(sender_email, app_pass)
     #server.sendmail(sender_email, receiver_email, message)
 
-
 sleep(1000)
-
