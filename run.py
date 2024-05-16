@@ -23,7 +23,7 @@ XPATH_login = '/html/body/form/div[3]/table/tbody/tr[4]/td/div/div/table/tbody/t
 
 driver.find_element(By.XPATH,XPATH_username).send_keys('agnelo.dcosta')
 sleep(2)
-driver.find_element(By.XPATH,XPATH_password).send_keys('July2017!')
+driver.find_element(By.XPATH,XPATH_password).send_keys('')
 sleep(2)
 driver.find_element(By.XPATH,XPATH_login).click()
 sleep(2)
@@ -36,22 +36,24 @@ sleep(2)
 driver.find_element(By.XPATH,XPATH_enter).click()
 sleep(2)
 
+# Fixed partner ladder
 ladder_date = ""
-
-while ladder_date == "" :
-    # Fixed partner ladder
-    XPATH_date = '/html/body/form/div[3]/table/tbody/tr[4]/td/div/div/select'
-
+XPATH_date = '/html/body/form/div[3]/table/tbody/tr[4]/td/div/div/select'
+print(f"Checking for date.....")
+while len(ladder_date.strip()) == 0:
     try:
         ladder_date = driver.find_element(By.XPATH,XPATH_date).text
     except:
         ladder_date = ""
         print("Exception occured in reading date. Could not find XPATH_date element.")
 
-    print(f"date drop down text {ladder_date}")
-    if ladder_date == "" :
+    
+    if len(ladder_date.strip()) == 0:
         sleep(10)
         driver.refresh()
+    else:
+        print(f"date drop down text {ladder_date}")
+        break    
 
 
 # if any ladder_date is available send email
@@ -72,7 +74,7 @@ HURRY UP
 context = ssl.create_default_context()
 with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
     server.login(sender_email, app_pass)
-    server.sendmail(sender_email, receiver_email, message)
+    #server.sendmail(sender_email, receiver_email, message)
 
 
 sleep(1000)
